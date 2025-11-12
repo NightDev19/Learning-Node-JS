@@ -17,7 +17,7 @@ const file = join(__dirname, "file.txt");
 const content = "Some Content! Hello World";
 
 fs.writeFile(file, content, (err) => {
-  const data = fs.readFileSync(file, { encoding: "utf8" }); // Im using the syncronous Read File so we can do the task more smoothly also for short code HEHE
+  const data = fs.readFileSync(file, { encoding: "utf8" }); // Im using the synchronous Read File so we can do the task more smoothly also for short code HEHE
   if (err) {
     console.error(err);
   } else {
