@@ -4,8 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
   </head>
   <body>
-    <h1>Hello World!!</h1>
+    <div class="hero bg-primary-content min-h-screen">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-5xl font-bold">Hello there</h1>
+          <p class="py-6">
+            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
+            a id nisi.
+          </p>
+          <!-- i want it goes to /about when clicked -->
+          <button
+            class="btn btn-primary"
+            onclick="window.location.href='/about'"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
