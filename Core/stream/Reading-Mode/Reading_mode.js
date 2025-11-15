@@ -1,24 +1,24 @@
 import { createReadStream } from "fs";
 
-// Paused Mode is a reading mode that allows the user to pause the reading process and resume it later.
-// Paused Mode example
 const readableStream = createReadStream("example.txt", {
   encoding: "utf8",
-  highWaterMark: 64 * 1024, // 64KB Chunk
+  highWaterMark: 10, // small chunks for demo
 });
 
-// Manually consume the stream using read()
-readableStream.on("readable", () => {
-  let chunk;
-  while ((chunk = readableStream.read()) !== null) {
-    console.log(chunk);
-  }
+console.log("=== PAUSED MODE ===");
+
+readableStream.once("readable", () => {
+  const chunk = readableStream.read(5); // read only part of first chunk
+  console.log("Paused Mode chunk:", chunk);
+
+  console.log("=== SWITCH TO FLOWING MODE ===");
+
+  // Now Flowing Mode will work, emitting remaining data
+  readableStream.on("data", (chunk) => {
+    console.log("Flowing Mode chunk:", chunk);
+  });
 });
 
 readableStream.on("end", () => {
   console.log("Stream ended");
-});
-
-readableStream.on("error", (err) => {
-  console.error("Error occurred:", err);
 });
