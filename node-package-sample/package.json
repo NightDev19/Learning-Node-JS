@@ -31,6 +31,7 @@
     "url": "https://github.com/yourname/node-package-sample/issues"
   },
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.18.2"
   },
   "devDependencies": {

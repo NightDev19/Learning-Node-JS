@@ -31,7 +31,7 @@ This creates a minimal package.json. We'll replace/extends it later.
     npm install express
 
     # Development tool (auto-save to devDependencies)
-    npm install --save-dev nodemon jest eslint @babel/core @babel/cli @babel/preset-env @babel/preset-es2017
+    npm install --save-dev nodemon jest eslint babel-jest @babel/core @babel/cli @babel/preset-env @babel/preset-es2017
 ```
 
 This will create a package-lock.json that shows the dependencies informations and also it makes a node_modules where you can find the packages that has been installed or downloaded
@@ -43,18 +43,33 @@ This will create a package-lock.json that shows the dependencies informations an
 Create a folder named 'src' and inside it create a file named 'index.js' with the content below
 
 ```javascript
-    import express from 'express';
+    import app from "./server.js";
+  const port = process.env.PORT || 8080;
+  const hostname = "localhost";
 
-    const app = express();
+  app.listen(port, hostname, () => {
+    console.log(`Example app listening on http://${hostname}:${port}`);
+  });
 
-    const port = process.env.PORT || 3000;
+```
 
-    app.get("/",(req,res)=>{
-        res.send("Hello World");
-    })
-    app.listen(port,() =>{
-        console.log(`Example app listening on port ${port}`)
-    })
+and server.js
+
+```javascript
+import express from "express";
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+app.get('/about',(req,res) =>{
+  res.send("About Page")
+})
+
+export default app;
+
 ```
 
 *__Note (Module system):__ The simple above uses ES Module (import). If you prefer  CommonJS either:*
@@ -70,16 +85,24 @@ Create test/index.test.js with the content below
 
 ```javascript
   // /src/test/index.test.js
-  import request from "supertest";
-  import app from "../index.js"; // Make sure this path is correct!
+import request from "supertest";
+import app from "../server.js"; // Make sure this path is correct!
 
-  describe("GET /", () => {
-    it("responds with Hello World", async () => {
-      const response = await request(app).get("/");
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("Hello World");
-    });
+describe("GET /", () => {
+  it("responds with Hello World", async () => {
+    const response = await request(app).get("/");
+    expect(response.status).toBe(200);
+    expect(response.text).toBe("Hello World");
   });
+});
+
+describe("GET /about", () => {
+  it("responds with About Page", async () => {
+    const response = await request(app).get("/about");
+    expect(response.status).toBe(200);
+    expect(response.text).toBe("About Page");
+  });
+});
 
 ```
 
@@ -138,11 +161,12 @@ Open package.json and replace contents with the example below (or merge the scri
   "version": "1.0.0",
   "description": "Minimal Node.js sample demonstrating package.json structure",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "babel src --out-dir dist --extensions \".js,.mjs,.jsx\"",
-    "start": "node src/index.js",
-    "dev": "nodemon --watch . --ext js,json --inspect=9229 src/index.js",
+    "clean": "rimraf dist",
+    "build": "npm run clean && babel src --out-dir dist --extensions \".js,.mjs,.jsx\" --verbose",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch src --ext js,json --inspect=9229 src/index.js",
     "test": "jest --coverage",
     "lint": "eslint . --ext .js",
     "prepare": "echo \"prepare script ran (example)\""
@@ -165,6 +189,7 @@ Open package.json and replace contents with the example below (or merge the scri
     "url": "https://github.com/yourname/node-package-sample/issues"
   },
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.18.2"
   },
   "devDependencies": {
@@ -177,9 +202,11 @@ Open package.json and replace contents with the example below (or merge the scri
     "globals": "^16.5.0",
     "jest": "^29.7.0",
     "nodemon": "^2.0.0",
+    "rimraf": "^6.1.0",
     "supertest": "^7.1.4"
   }
 }
+
 ```
 
 Key things to note in this package.json:
@@ -187,3 +214,131 @@ Key things to note in this package.json:
 - "type": "module" — enables ES module syntax (import).
 - scripts — includes start, dev (nodemon with inspector), test, lint, and prepare.
 - engines — documents Node version requirements.
+
+---
+
+- Step 8 : Run the app and test scripts
+
+Open a terminal in VS Code.
+
+Start in production-like mode:
+
+```bash
+npm start
+# Expected console: "Server listening on http://localhost:3000"
+```
+
+Start in development mode (auto-reloads, inspector enabled):
+
+```bash
+npm run dev
+# nodemon watches files and restarts on changes; Node inspector runs on port 9229
+```
+
+Run tests:
+
+```bash
+npm test
+# Jest runs; you should see test results and coverage
+```
+
+Run linter:
+
+```bash
+npm run lint
+# ESLint checks files (requires config)
+```
+
+Verify the server response:
+
+```bash
+curl http://localhost:3000
+# should return {"message":"Hello from node-package-sample"}
+```
+
+---
+
+- Step 9 : Showing Data on HTML
+  
+Create a views folder on the src folder
+
+```java
+node-package-sample/
+ ├─ node_modules/           ← installed packages
+ ├─ dist/                   ← compiled backend (from Babel)
+ ├─ public/                 ← static files (CSS, JS, images)
+ │   └─ ...
+ ├─ src/
+ │   ├─ views/              ← templates
+ │   │   └─ index.ejs       ← dynamic HTML
+ │   ├─ index.js
+ │   └─ server.js
+ ├─ package.json
+ └─ ...
+
+```
+
+Install a template engine
+
+```bash
+npm install ejs --save-dev
+```
+
+Configure Express to use EJS (with ES Modules) in server.js
+
+```javascript
+import express from "express";
+import path from "path";
+
+const app = express();
+
+// Middle ware
+app.use("/static", express.static(path.join(process.cwd(), "public")));
+
+// Set correct views folder
+app.set("views", path.join(process.cwd(), "src/views"));
+app.set("view engine", "ejs");
+
+// Routes
+app.get("/", (req, res) => {
+  res.render("index", { name: "Home Page" });
+});
+
+app.get("/about", (req, res) => {
+  res.render("about", { name: "About Page" });
+});
+
+export default app;
+
+```
+
+Also update your test into
+
+```javascript
+  import request from "supertest";
+  import app from "../server.js";
+
+  describe("GET /", () => {
+    it("should render the index page with the correct title", async () => {
+      const res = await request(app).get("/");
+      expect(res.statusCode).toEqual(200);
+      expect(res.text).toContain("Home Page");
+    });
+  });
+
+  describe("GET /about", () => {
+    it("should render the about page with the correct title", async () => {
+      const res = await request(app).get("/about");
+      expect(res.statusCode).toEqual(200);
+      expect(res.text).toContain("About Page");
+    });
+  });
+
+  describe("Static Files", () => {
+    it("should serve static files from the public directory", async () => {
+      // Assuming you have a file named `test-file.txt` in your `public` directory
+      const res = await request(app).get("/static/index.html");
+      expect(res.statusCode).toEqual(200);
+    });
+  });
+```
