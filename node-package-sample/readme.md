@@ -1,5 +1,5 @@
-# We dont have any code here but you'll learn about package .json which is another important thing in the development
-
+# NPM and Package Management
+<!-- We dont have any code here but you'll learn about package .json which is another important thing in the development -->
 ## Initialize NPM Package
 
 Here's the step by step how to use the package.json
@@ -150,6 +150,8 @@ Run the initializer (answers can be basic; choose a style you want):
 ```
 
 This writes .eslintrc.*. If you prefer not to run it now, add lint script below and run later.
+
+---
 
 - Step 7 : Replace/extend package.json (example final)
 
