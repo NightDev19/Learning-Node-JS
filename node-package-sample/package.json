@@ -1,0 +1,44 @@
+{
+  "name": "node-package-sample",
+  "version": "1.0.0",
+  "description": "Minimal Node.js sample demonstrating package.json structure",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist --extensions \".js,.mjs,.jsx\"",
+    "start": "node src/index.js",
+    "dev": "nodemon --watch . --ext js,json --inspect=9229 index.js",
+    "test": "jest --coverage",
+    "lint": "eslint . --ext .js",
+    "prepare": "echo \"prepare script ran (example)\""
+  },
+  "keywords": [
+    "node",
+    "package.json",
+    "example"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourname/node-package-sample.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourname/node-package-sample/issues"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "babel-jest": "^30.2.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.0",
+    "supertest": "^7.1.4"
+  }
+}
