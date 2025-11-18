@@ -140,13 +140,18 @@ Open package.json and replace contents with the example below (or merge the scri
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon --watch . --ext js,json --inspect=9229 index.js",
+    "build": "babel src --out-dir dist --extensions \".js,.mjs,.jsx\"",
+    "start": "node src/index.js",
+    "dev": "nodemon --watch . --ext js,json --inspect=9229 src/index.js",
     "test": "jest --coverage",
     "lint": "eslint . --ext .js",
     "prepare": "echo \"prepare script ran (example)\""
   },
-  "keywords": ["node", "package.json", "example"],
+  "keywords": [
+    "node",
+    "package.json",
+    "example"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "engines": {
@@ -163,12 +168,18 @@ Open package.json and replace contents with the example below (or merge the scri
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "jest": "^29.0.0",
-    "nodemon": "^2.0.0"
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@eslint/js": "^9.39.1",
+    "babel-jest": "^30.2.0",
+    "eslint": "^8.57.1",
+    "globals": "^16.5.0",
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.0",
+    "supertest": "^7.1.4"
   }
 }
-
 ```
 
 Key things to note in this package.json:

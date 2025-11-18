@@ -1,7 +1,9 @@
-import app from "./app.js";
-const port = process.env.PORT || 8080;
-const hostname = "localhost";
+import express from "express";
 
-app.listen(port, hostname, () => {
-  console.log(`Example app listening on http://${hostname}:${port}`);
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
+
+export default app;

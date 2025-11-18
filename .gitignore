@@ -17,6 +17,10 @@ yarn-error.log*
 dist/
 build/
 
+# Ignore test coverage reports
+coverage/
+
+
 # IDE/Editor files
 .vscode/
 .idea/
