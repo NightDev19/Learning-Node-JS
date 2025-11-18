@@ -31,7 +31,7 @@ This creates a minimal package.json. We'll replace/extends it later.
     npm install express
 
     # Development tool (auto-save to devDependencies)
-    npm install --save-dev nodemon jest eslint @babel/core @babel/preset-env @babel/preset-es2017
+    npm install --save-dev nodemon jest eslint @babel/core @babel/cli @babel/preset-env @babel/preset-es2017
 ```
 
 This will create a package-lock.json that shows the dependencies informations and also it makes a node_modules where you can find the packages that has been installed or downloaded
