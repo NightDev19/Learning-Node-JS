@@ -3,8 +3,6 @@ import authService from "./auth.service.js";
 class AuthController {
   async signup(req, res) {
     try {
-      console.log("Request body:", req.body); // Add this debug line
-
       if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).json({ message: "Request body is empty" });
       }
@@ -40,7 +38,6 @@ class AuthController {
 
   async updatePassword(req, res) {
     try {
-      console.log("Request body:", req.body);
       if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).json({ message: "Request body is empty" });
       }
