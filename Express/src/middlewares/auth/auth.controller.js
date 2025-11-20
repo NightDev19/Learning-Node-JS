@@ -18,18 +18,26 @@ class AuthController {
 
   async login(req, res) {
     try {
-      console.log("Request body:", req.body); // Add this debug line
+      const { email, password } = req.body;
 
-      if (!req.body || Object.keys(req.body).length === 0) {
-        return res.status(400).json({ message: "Request body is empty" });
+      if (!email || !password) {
+        return res.render("admin/login", {
+          error: "Email and password are required",
+        });
       }
 
-      const result = await authService.login(req.body);
-      res.status(200).json(result);
+      const result = await authService.login({ email, password });
+
+      // Set session for admin login
+      req.session.user = result.user;
+
+      // Redirect to dashboard
+      return res.redirect("/admin/dashboard");
     } catch (error) {
-      res.status(401).json({ message: error.message });
+      return res.render("admin/login", { error: error.message });
     }
   }
+
   async updatePassword(req, res) {
     try {
       console.log("Request body:", req.body);
@@ -44,6 +52,18 @@ class AuthController {
       };
 
       const result = await authService.updatePassword(dataWithUserId);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+  async me(req, res) {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const result = await authService.me({ userId: req.user.id });
       res.status(200).json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });

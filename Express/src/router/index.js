@@ -1,7 +1,8 @@
 import express, { Router } from "express";
 import user from "./user/index.js";
-import admin from "./admin/index.js";
+// import admin from "./admin/index.js";
 import authRouter from "../modules/auth/auth.routes.js";
+import adminRouter from "../modules/admin/admin.routes.js";
 
 const router = Router();
 
@@ -10,7 +11,7 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 router.use("/users", user);
-router.use("/admin", admin);
+router.use("/admin", adminRouter);
 router.use("/api/auth", authRouter);
 
 export default router;

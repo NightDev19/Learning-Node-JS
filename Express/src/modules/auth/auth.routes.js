@@ -1,6 +1,6 @@
 import { Router } from "express";
 import authController from "../../middlewares/auth/auth.controller.js";
-
+import authMiddleware from "../../middlewares/auth/auth.middleware.js";
 const authRouter = Router();
 
 authRouter.post("/signup", authController.signup);
@@ -37,6 +37,13 @@ POST http://localhost:3000/api/auth/update-password
   "oldPassword": "oldpassword123",
   "newPassword": "newpassword123"
 }
+*/
+
+authRouter.get("/me", authMiddleware, authController.me);
+/*
+**Get User Profile:**
+```
+GET http://localhost:3000/api/auth/me
 */
 
 export default authRouter;

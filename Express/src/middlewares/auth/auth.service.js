@@ -81,6 +81,16 @@ class AuthService {
     });
     return { message: "Password updated successfully" };
   }
+
+  async me(data) {
+    const { userId } = data;
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    console.log("In me", user);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return { user };
+  }
 }
 
 const authService = new AuthService();
